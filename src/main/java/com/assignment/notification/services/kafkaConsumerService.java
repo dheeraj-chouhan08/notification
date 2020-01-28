@@ -52,6 +52,7 @@ public class kafkaConsumerService {
         // ***** if phone_number is blacklisted nothing to do *******
         if(jedis.sismember("blacklist", phone_number)){
             logger.info(String.format("####### -> Sms can't be sent since its blacklisted number !!!"));
+
         }
 
         else {
@@ -69,7 +70,7 @@ public class kafkaConsumerService {
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Content-Type" , "application/json");
-            httpHeaders.set("key", "7b73f76d-369e-11ea-9e4e-025282c394f23");
+            httpHeaders.set("key", "7b73f76d-369e-11ea-9e4e-025282c394f2322");
 
             HttpEntity<RootSms> request = new HttpEntity<>(rootSms, httpHeaders);
 
