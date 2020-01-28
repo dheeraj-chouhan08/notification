@@ -66,7 +66,6 @@ public class ElasticsearchServiceImpl {
         if (scrollId == null) {
 
             MatchQueryBuilder queryBuilder1 = new MatchQueryBuilder("message", text);
-          //  MatchAllQueryBuilder queryBuilder1 = new MatchAllQueryBuilder();
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 
 
