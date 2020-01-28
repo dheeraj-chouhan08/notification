@@ -70,7 +70,7 @@ public class kafkaConsumerService {
 
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set("Content-Type" , "application/json");
-            httpHeaders.set("key", "7b73f76d-369e-11ea-6ty7-9e4e-025282c394f232");
+            httpHeaders.set("key", "7b73f76d-369e-11ea-6iy7-9e4e-025282c394f232");
 
             HttpEntity<RootSms> request = new HttpEntity<>(rootSms, httpHeaders);
 
