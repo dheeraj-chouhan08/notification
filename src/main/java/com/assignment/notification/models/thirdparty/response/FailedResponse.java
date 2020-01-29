@@ -6,9 +6,10 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 public class FailedResponse {
 
-private  Response response;
+   private  Response response;
 
 }

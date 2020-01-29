@@ -6,10 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@Getter
-@Setter
-
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class RootSms {
 
     private String deliverychannel;
@@ -18,13 +16,12 @@ public class RootSms {
 
     private List<Destination>destination = new ArrayList<>();
 
-
-
-    public RootSms(String text, String phone_number, String corelationid) {
+    public RootSms(String text, String phoneNumber, String correlationId) {
         this.deliverychannel = "sms";
         this.channels = new Channels(text);
-        Destination destination = new Destination(corelationid, phone_number);
+        Destination destination = new Destination(correlationId, phoneNumber);
         this.destination.add(destination);
     }
+
 
 }

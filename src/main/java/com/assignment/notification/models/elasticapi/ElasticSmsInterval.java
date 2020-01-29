@@ -9,11 +9,12 @@ import java.time.LocalDateTime;
 @Builder
 @Getter @Setter
 public class ElasticSmsInterval {
-    private String phone_number;
-    private LocalDateTime created_from;
-    private LocalDateTime created_to;
+    private String phoneNumber;
+    private LocalDateTime createdFrom;
+    private LocalDateTime createdTo;
     private String scrollId;
-    private Integer limit;
+    @Builder.Default
+    private Integer limit = 5;
 
 
 }

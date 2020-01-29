@@ -1,4 +1,4 @@
-package com.assignment.notification.exceptions;
+package com.assignment.notification.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor @NoArgsConstructor
 @Builder
-public class RecordNotFoundException extends Exception{
-    private String message;
-    private  Integer statusCode;
+public class MessageSentResponseDto {
 
+ private String requestId;
+
+ private String comments;
 
 }

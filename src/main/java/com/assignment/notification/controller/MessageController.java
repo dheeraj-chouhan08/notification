@@ -1,12 +1,10 @@
 package com.assignment.notification.controller;
 
-import com.assignment.notification.dto.SmsRequestDto;
-import com.assignment.notification.models.MessageSentResponse;
-import com.assignment.notification.models.SmsCreateDto;
+import com.assignment.notification.models.dto.*;
+
 import com.assignment.notification.services.SmsService;
 import com.assignment.notification.services.kafkaProducerService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,54 +13,45 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/v1")
+@Slf4j
 public class MessageController {
-
-    private  static  final Logger logger =  LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     private SmsService smsService;
 
     @Autowired
-    private  kafkaProducerService kafkaProducerService;
+    private kafkaProducerService kafkaProducerService;
 
-
-    /* *************** for sending given message to given phone_number ************ */
+    /* *************** for sending given message to given phoneNumber ************ */
 
     @RequestMapping(path = "/sms/send", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HashMap<String, MessageSentResponse> > createSms(@Valid @RequestBody SmsCreateDto smsCreateDto)  {
+    public ResponseEntity<MessageSentResponseDto> createSms(@Valid @RequestBody SmsCreateDto smsCreateDto) {
 
-            String request_id = smsService.addSmsRequest(smsCreateDto);
-            this.kafkaProducerService.sendMessage(request_id);
-
-
-
-            MessageSentResponse data = new MessageSentResponse(request_id);
-            HashMap<String, MessageSentResponse> map = new HashMap<>();
-            map.put("data",data);
-            return new ResponseEntity<HashMap<String, MessageSentResponse>>(map,HttpStatus.OK);
-
+        try {
+            MessageSentResponseDto messageSentResponseDto = smsService.addSmsRequest(smsCreateDto);
+            this.kafkaProducerService.sendMessage(messageSentResponseDto.getRequestId());
+            return new ResponseEntity<MessageSentResponseDto>(messageSentResponseDto, HttpStatus.OK);
+        } catch (Exception ex) {
+            log.error("Internal Server Error Occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    /* *************** to get sms_request with respect to particular id ************ */
+    /* *************** to get smsRequest with respect to particular id ************ */
 
-    @RequestMapping(path = "/get/sms", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus( HttpStatus.OK)
-    public ResponseEntity<SmsRequestDto> getSmsDetails( @RequestParam(value = "request_id") Integer request_id) throws  SQLException {
+    @RequestMapping(path = "/get/sms/{requestId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SmsRequestDto> getSmsDetails(@PathVariable(value = "requestId") Integer requestId) throws SQLException {
+        try {
+            SmsRequestDto smsRequestDto = smsService.getSmsRequest(requestId);
+            return new ResponseEntity<SmsRequestDto>(smsRequestDto, HttpStatus.OK);
+        } catch (Exception ex) {
 
-        SmsRequestDto smsRequestDto = smsService.getSmsRequest(request_id);
-        if (smsRequestDto == null) {
+            log.error("Internal Server Error Occurred");
             throw new SQLException();
         }
-        return new ResponseEntity<SmsRequestDto>(smsRequestDto, HttpStatus.OK);
     }
-
-
-
-
-
 
 }

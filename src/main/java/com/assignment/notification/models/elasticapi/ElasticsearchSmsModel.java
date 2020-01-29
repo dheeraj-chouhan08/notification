@@ -12,12 +12,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ElasticsearchSmsModel {
-    private String phone_number;
+    private String phoneNumber;
 
+    private LocalDateTime createdAt;
 
-    private LocalDateTime created_at;
-
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     private String message;
 }

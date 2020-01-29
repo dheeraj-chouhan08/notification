@@ -1,67 +1,63 @@
 package com.assignment.notification.controller;
 
 import com.assignment.notification.exceptions.PhoneNumberNotFoundException;
-import com.assignment.notification.dto.BlacklistedNumberDto;
 import com.assignment.notification.exceptions.RecordNotFoundException;
+import com.assignment.notification.models.dto.AddBlacklistResponseDto;
+import com.assignment.notification.models.dto.BlacklistedNumberDto;
 import com.assignment.notification.services.BlacklistedNumbersService;
-import org.slf4j.Logger;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-
 @RestController
+@Slf4j
 @RequestMapping("/v1")
 public class BlacklistController {
-    private  static  final Logger logger =  LoggerFactory.getLogger(BlacklistController.class);
 
     @Autowired
     BlacklistedNumbersService blacklistedNumbersService;
 
-  /* ***************  for adding phone_Numbers to blacklist ************ */
+    /* ***************  for adding phoneNumbers to blacklist ************ */
 
     @RequestMapping(path = "/blacklist", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<HashMap<String, String>> addBlacklistNumber(@RequestBody BlacklistedNumberDto blacklistedNumberDto){
+    public ResponseEntity<AddBlacklistResponseDto> addBlacklistNumber(@RequestBody BlacklistedNumberDto blacklistedNumberDto) {
 
-      try {
-          return new ResponseEntity<HashMap<String, String>>(blacklistedNumbersService.addBlacklistNumbers(blacklistedNumberDto), HttpStatus.OK);
-      }
-      catch (Exception e){
-          logger.error("---------------**** error in adding phone_numbers to blacklist ****-----------");
-          return ResponseEntity.badRequest().build();
-      }
+        try {
+            AddBlacklistResponseDto addBlacklistResponseDto = blacklistedNumbersService.addBlacklistNumbers(blacklistedNumberDto);
+            return new ResponseEntity<AddBlacklistResponseDto>(addBlacklistResponseDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("---------------**** error in adding phone_numbers to blacklist ****-----------");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
-    /* *************** for getting blacklisted phone_Numbers ************ */
+    /* *************** for getting blacklisted phoneNumbers ************ */
 
     @RequestMapping(path = "/blacklist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BlacklistedNumberDto> getBlacklistedNumbers() throws RecordNotFoundException {
         try {
-            return blacklistedNumbersService.getBlacklistedNumbers();
-        }
-        catch (Exception e){
-            throw new RecordNotFoundException ();
+            BlacklistedNumberDto blacklistedNumberDto = blacklistedNumbersService.getBlacklistedNumbers();
+            return new ResponseEntity<BlacklistedNumberDto>(blacklistedNumberDto, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("---------------**** error in retrieving  blacklisted numbers ****-----------");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     /* *************** for deleting phone_Numbers from blacklist ************ */
 
-    @RequestMapping(path = "/blacklist", method = RequestMethod.DELETE, produces =  MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/blacklist", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteNumber(@RequestBody BlacklistedNumberDto blacklistedNumberDto) throws PhoneNumberNotFoundException {
         try {
-            logger.info("trying to delete phone_number");
             blacklistedNumbersService.deletePhone_number(blacklistedNumberDto);
-        }
-        catch(Exception e){
-            throw new PhoneNumberNotFoundException( );
+        } catch (Exception e) {
+            log.error("--------------*** error in deleting phoneNumbers from blacklist ***------------");
+            throw new PhoneNumberNotFoundException();
         }
     }
 }
