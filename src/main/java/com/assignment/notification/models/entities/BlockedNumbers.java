@@ -1,4 +1,4 @@
-package com.assignment.notification.entities;
+package com.assignment.notification.models.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,5 +13,5 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class BlockedNumbers {
     @Id
-    String phone_number;
+    String phoneNumber;
 }

@@ -4,7 +4,7 @@ import lombok.*;
 
 
 @Data @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor @Builder
 public class ApiError {
     private Error error;
 

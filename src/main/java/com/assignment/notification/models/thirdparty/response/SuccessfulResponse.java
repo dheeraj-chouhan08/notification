@@ -6,9 +6,10 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor @AllArgsConstructor
+@Builder
 public class SuccessfulResponse {
-    private List<Response> response;
 
+    private List<Response> response;
 
 }
 

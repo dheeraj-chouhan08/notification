@@ -10,26 +10,10 @@ import java.util.List;
 @Getter @Setter
 public class Destination {
     private List<String> msisdn = new ArrayList<>();
-    private String corelationid;
+    private String correlationId;
 
-    public Destination(String corelationid, String phone_number) {
-        this.corelationid = corelationid;
+    public Destination(String correlationId, String phone_number) {
+        this.correlationId = correlationId;
         this.msisdn.add(phone_number);
-    }
-
-    public List<String> getMsisdn() {
-        return msisdn;
-    }
-
-    public void setMsisdn(List<String> msisdn) {
-        this.msisdn = msisdn;
-    }
-
-    public String getCorelationid() {
-        return corelationid;
-    }
-
-    public void setCorelationid(String corelationid) {
-        this.corelationid = corelationid;
     }
 }
